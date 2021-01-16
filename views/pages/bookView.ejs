@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <% include ../includes/header.ejs %>
+</head>
+
+<body>
+  <% include ../includes/nav.ejs %>
+    <div class="jumbotron text-center">
+      <div class="container">
+        <h1>
+          <%= title %>
+        </h1>
+      </div>
+    </div>
+    <div class="container text-center">
+      <img src=" <%= url %> " class="mx-auto" alt="" style="width: 30vw; height: auto">
+      <h2 class="text-start">
+        <%= bookTitle %>
+      </h2>
+      <textarea class="form-control" id="exampleFormControlTextarea1" rows="25"
+        style="margin-bottom: 5vh;"> <%= bookSummary %> </textarea>
+
+
+    </div>
+
+</body>
+
+</html>
