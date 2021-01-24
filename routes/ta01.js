@@ -1,75 +1,25 @@
 const express = require('express');
 const fs = require('fs'); // File system for TA01
 const router = express.Router();
+
+const ta01Controller = require('../controllers/ta01');
+
 // Remember Team Activity 01? 
 // This is the same solution, but implemented in our app using 
 // proper routing for the view engine
 
-const activities = ['soccer', "basketball", "football", "swimming"];
-router.get('/', (req, res, next) => {
-    // Request handling
-    // CORE CHALLENGE 1 -
-    // HTML page is written
-    res.write('<html>');
-    res.write('<head><title>Hello Browser!</Title></head>');
-    res.write('<body>');
-    res.write('<h1>Welcome to my world!</h1>');
-    // navigation to your activities endpoint.
-    res.write('<a href="/">Home</a></br>')
-    res.write('<a href="ta01/activities">Activities List</a></br>');
-    // These are navigation links for the stretch challenges
-    res.write('<a href="ta01/stretch-1">Stretch 1 (CSS)</a></br>');
-    res.write('<a href="ta01/stretch-2">Stretch 2 (Write Form input to text input)</a></br>');
-    res.write('<a href="ta01/stretch-3">Stretch 3 (Add two number inputs together)</a></br>');
-    res.write('</body>');
-    res.write('</html>');
-    return res.end(); // Return so you don't execute remaining code outside of if statement
-});
+router.get('/', ta01Controller.getTA01);
 
 // CORE CHALLENGE 2 -
-router.get('/activities', (req, res, next) => {
-    res.write('<html>');
-    res.write('<body>');
-    res.write('<ul>');
-    // Loop through activities using for...of loop to display the list
-    for (const activity of activities) {
-        res.write(`<li>${activity}</li>`);
-    }
-    res.write('</ul>');
-    // Form for "./add-activity".
-    res.write('<form action="./add-activity" method="POST">');
-    res.write('<input type="text" name="newActivity">');
-    res.write('<button type="submit">Submit</button>');
-    res.write('</form>');
-    // End tags
-    res.write('</body>');
-    res.write('</html>');
-    return res.end(); // Return so you don't execute remaining code outside of if statement
-});
+router.get('/activities', ta01Controller.getActivities);
 
 // CORE CHALLENGE 3 -
-router.post('/add-activity', (req, res, next) => {
-    const body = [];
-    req.on('data', (chunk) => {
-        body.push(chunk);
-    });
-    return req.on('end', () => {
-        const parsedBody = Buffer.concat(body).toString();
-        const newActivity = parsedBody.split('=')[1];
-        // Console log seen in terminal, may be encoded, but isn't important for now
-        console.log(newActivity);
-        activities.push(newActivity);
-
-        // Remain on './activities' url.
-        res.writeHead(302, {'Location': 'activities'});
-        res.end();
-    });
-});
+router.post('/add-activity', ta01Controller.addActivity);
 
 /***************************************************************************
-* STRETCH CHALLENGE SOLUTIONS
-* These are the solutions for the stretch challenges.
-***************************************************************************/
+ * STRETCH CHALLENGE SOLUTIONS
+ * These are the solutions for the stretch challenges.
+ ***************************************************************************/
 // STRETCH CHALLENGE 1 - Add CSS.
 router.get("/stretch-1", (req, res, next) => {
     // This will be fairly similar to any HTML page, but have internal CSS
@@ -80,8 +30,8 @@ router.get("/stretch-1", (req, res, next) => {
     res.write('<head><title>Hello Browser!</Title>');
     // Really basic styling with some pizzazz....
     res.write('<style>');
-    res.write('body { background-image: linear-gradient('
-            +'to left, violet, indigo, blue, green, yellow, orange, red); color: White}');
+    res.write('body { background-image: linear-gradient(' +
+        'to left, violet, indigo, blue, green, yellow, orange, red); color: White}');
     res.write('</style>');
     res.write('</head>');
     res.write('<body>');
@@ -122,7 +72,7 @@ router.post("/stretch-2", (req, res, next) => {
         const message = parsedBody.split('=')[1];
         console.log(message);
         fs.writeFile('stretch2.txt', message, err => {
-            res.writeHead(302, {'Location': '/'}); // Redirect
+            res.writeHead(302, { 'Location': '/' }); // Redirect
             return res.end();
         });
     });
@@ -158,15 +108,15 @@ router.post("/stretch-3", (req, res, next) => {
         parsedBody = parsedBody.split('&'); // Seperate key-val pairs
         const values = []; // Array to store retrieved values.
         for (let key_val_pair of parsedBody) {
-        console.log('KeyVal pair: ' + key_val_pair);
-        values.push(key_val_pair.split('=')[1]); // Push value into array.
+            console.log('KeyVal pair: ' + key_val_pair);
+            values.push(key_val_pair.split('=')[1]); // Push value into array.
         }
 
         // You will need to use JS' parseInt to convert the variable from type
         // string to number, otherwise they will concat like a string.
         // e.g. 11+15 will log a string of '1115'.
         console.log(parseInt(values[0]) + parseInt(values[1])); // Console log the sum
-        res.writeHead(302, {'Location': '/'}); // Redirect to home
+        res.writeHead(302, { 'Location': '/' }); // Redirect to home
         return res.end();
     });
 });
