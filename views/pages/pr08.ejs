@@ -1,0 +1,53 @@
+<% include ../includes/header.ejs %>
+    <title>
+        <%= title %>
+    </title>
+    <link href="/stylesheets/ta03.css" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body>
+        <% include ../includes/nav.ejs %>
+            <div class="container">
+                <form action="/pr08" method="POST" class="form-inline">
+                    <input type="text" name="searchValue" placeholder="Search by Title" class="form-control" style="width:300px">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <% if (searchedValue.length > 0) { %>
+                        <a type="button" href="/pr08" class="btn btn-default">Clear Search Results</a>
+                        <h3>Showing search results for:
+                            <%= searchedValue %>
+                        </h3>
+                        <% } %>
+                </form>
+                <h1>JSON Results</h1>
+                <div class="productsView">
+                    <% for(var i=0; i<data.length; i++) {%>
+
+                        <div class="productView">
+                            <h3>
+                                <%= data[i].name %>
+                            </h3>
+                            <img src="<%= data[i].imageUrl %>">
+                            <p>
+                                <%= data[i].description %>
+                            </p>
+                            <p>
+                                <%= data[i].price %>
+                            </p>
+                            <a href="/ta03/<%= data[i].name %>" class=".btn">Details</a>
+                        </div>
+                        <% } %>
+                </div>
+
+            </div>
+            <!-- Pagination button generation -->
+            <form class="actions container">
+                <% for(var i = 1; i <= numPages; i++) { %>
+                    <a href="?page=<%= i %><%= (searchedValue) ? `&searchValue=${searchedValue}` :  " " %>" class="btn <%= (page==i) ? 'btn-primary' : 'btn-default' %>">
+                        <%= i %>
+                    </a>
+                    <% } %>
+                        </div>
+    </body>
+
+    </html>
