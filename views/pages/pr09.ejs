@@ -1,21 +1,22 @@
 <% include ../includes/header.ejs %>
-    <title>
-        <%= title %>
-    </title>
-    <link href="/stylesheets/ta03.css" rel="stylesheet" type="text/css" />
-    </head>
+    <% include ../includes/nav.ejs %>
+        <title>
+            <%= title %>
+        </title>
+        <link href="/stylesheets/ta03.css" rel="stylesheet" type="text/css" />
+        </head>
 
-    <body>
-        <div class="container">
-            <h1>Pokemon:</h1>
-            <ul id="pokemon">
-            </ul>
-            <div>
-                <button class="btn-primary" id="prevButton">Previous</button>
-                <button class="btn-primary" id="nextButton">Next</button>
+        <body>
+            <div class="container">
+                <h1>Pokemon:</h1>
+                <ul id="pokemon">
+                </ul>
+                <div>
+                    <button class="btn-primary" id="prevButton">Previous</button>
+                    <button class="btn-primary" id="nextButton">Next</button>
+                </div>
             </div>
-        </div>
-        <script src="/scripts/pr09.js"></script>
-    </body>
+            <script src="/scripts/pr09.js"></script>
+        </body>
 
-    </html>
+        </html>
