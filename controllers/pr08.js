@@ -15,8 +15,8 @@ const getProducts = (req, res, json) => {
 
     res.render('pages/pr08', {
         data: filteredData.slice(startIndex, endIndex), // For JSON/Array and not Mongoose, .slice() works best.
-        path: 'proveAssignments/03',
-        title: 'Week 3 Prove Assignment',
+        path: 'proveAssignments/08',
+        title: 'Week 8 Prove Assignment',
         searchedValue: searchedValue,
         page: page,
         numPages: Math.ceil(filteredData.length / ITEMS_PER_PAGE)
