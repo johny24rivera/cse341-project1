@@ -1,30 +1,26 @@
-// A simple async GET request function
 const getData = async(url = '') => {
     const response = await fetch(url, {
-        // Await the response.
         method: 'GET'
     })
-    return response.json() // Wrap in a promise using JSON formatting.
+    return response.json()
 }
 
-// A simple async POST request function
 const postData = async(url = '', data = {}) => {
     const response = await fetch(url, {
-        // Await the response.
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data) // Data must be sent as a string
+        body: JSON.stringify(data)
     })
-    return response.json() // Wrap in a promise using JSON formatting.
+    return response
 }
 
 const populateList = () => {
     const nameList = document.getElementById('nameList')
-    nameList.innerHTML = '' // Clear list first
+    nameList.innerHTML = '';
 
-    const data = getData('/pr10/fetchAll') // fetching from our own server
+    const data = getData('/pr10/fetchAll');
 
     data.then(json => {
         json.avengers.forEach(item => {
@@ -36,7 +32,7 @@ const populateList = () => {
 }
 
 const submitName = () => {
-    const newName = document.getElementById('newName').value // Grab the value of our new name
+    const newName = document.getElementById('newName').value;
 
     const data = postData('/pr10/insertName', {
         newName: newName
@@ -45,14 +41,13 @@ const submitName = () => {
     data.then(response => {
         console.log(response)
         if (response.status == 200) {
-            populateList() // Repopulate the list
+            location.reload(true);
         } else {
-            console.error(status) // Console log our status code
+            console.error(status)
         }
     }).catch(err => {
         console.log(err);
     })
 }
 
-// Initialize the list
 populateList()
