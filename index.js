@@ -25,6 +25,7 @@ const pr02Routes = require('./routes/pr02');
 const pr08Routes = require('./routes/pr08');
 const pr09Routes = require('./routes/pr09');
 const pr10Routes = require('./routes/pr10');
+const pr11Routes = require('./routes/pr11');
 
 //team activities
 const ta01Routes = require('./routes/ta01');
@@ -51,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')))
     .use('/pr08', pr08Routes)
     .use('/pr09', pr09Routes)
     .use('/pr10', pr10Routes)
+    .use('/pr11', pr11Routes)
     .get('/', (req, res, next) => {
         // This is the primary index, always handled last. 
         res.render('pages/index', { title: 'Welcome to my CSE341 repo', path: '/' });
@@ -58,5 +60,18 @@ app.use(express.static(path.join(__dirname, 'public')))
     .use((req, res, next) => {
         // 404 page
         res.render('pages/404', { title: '404 - Page Not Found', path: req.url })
+    });
+
+const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+const io = require('socket.io')(server)
+
+io.on('connection', socket => {
+    console.log('Client connected')
+    socket.on('new-name', update => {
+        if (update) {
+            socket.broadcast.emit('update-list')
+        } else {
+            console.log('Looks like something went wrong')
+        }
     })
-    .listen(PORT, () => console.log(`Listening on ${PORT}`));
+})

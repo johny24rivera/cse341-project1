@@ -16,7 +16,9 @@
     "express-handlebars": "^3.0.2",
     "g-i-s": "^2.1.6",
     "nodemon": "^2.0.7",
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "socket.io": "^4.0.0",
+    "socket.io-client": "^4.0.0"
   },
   "devDependencies": {
     "request": "^2.81.0",
