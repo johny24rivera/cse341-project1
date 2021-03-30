@@ -77,6 +77,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 const server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 const io = require('socket.io')(server)
 
+// added comment
 io.on('connection', socket => {
     console.log('Client connected')
     socket.on('new-name', update => {
