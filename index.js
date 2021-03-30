@@ -14,6 +14,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session')
 const PORT = process.env.PORT || 5000 // So we can run on heroku || (OR) localhost:5000
 
 const app = express();
@@ -26,6 +27,7 @@ const pr08Routes = require('./routes/pr08');
 const pr09Routes = require('./routes/pr09');
 const pr10Routes = require('./routes/pr10');
 const pr11Routes = require('./routes/pr11');
+const pr12Routes = require('./routes/liveChat.js');
 
 //team activities
 const ta01Routes = require('./routes/ta01');
@@ -43,6 +45,15 @@ app.use(express.static(path.join(__dirname, 'public')))
     //.engine('hbs', expressHbs({layoutsDir: 'views/layouts/', defaultLayout: 'main-layout', extname: 'hbs'})) // For handlebars
     //.set('view engine', 'hbs')
     .use(bodyParser({ extended: false })) // For parsing the body of a POST
+    .use(
+        session({
+            // Simple and not very secure session
+            secret: 'random_text',
+            cookie: {
+                httpOnly: false // Permit access to client session
+            }
+        })
+    )
     .use('/ta01', ta01Routes)
     .use('/prove01', prove01Routes)
     .use('/ta02', ta02Routes)
@@ -53,6 +64,7 @@ app.use(express.static(path.join(__dirname, 'public')))
     .use('/pr09', pr09Routes)
     .use('/pr10', pr10Routes)
     .use('/pr11', pr11Routes)
+    .use('/pr12', pr12Routes)
     .get('/', (req, res, next) => {
         // This is the primary index, always handled last. 
         res.render('pages/index', { title: 'Welcome to my CSE341 repo', path: '/' });
@@ -68,10 +80,29 @@ const io = require('socket.io')(server)
 io.on('connection', socket => {
     console.log('Client connected')
     socket.on('new-name', update => {
-        if (update) {
-            socket.broadcast.emit('update-list')
-        } else {
-            console.log('Looks like something went wrong')
-        }
-    })
+            if (update) {
+                socket.broadcast.emit('update-list')
+            } else {
+                console.log('Looks like something went wrong')
+            }
+        })
+        .on('disconnect', () => {
+            console.log('A client disconnected!')
+        })
+        .on('newUser', (username, time) => {
+            // A new user logs in.
+            const message = `${username} has logged on.`
+            socket.broadcast.emit('newMessage', {
+                message,
+                from: 'admin'
+            })
+        })
+        .on('message', data => {
+            // Receive a new message
+            console.log('Message received')
+            console.log(data)
+            socket.broadcast.emit('newMessage', {
+                ...data
+            })
+        })
 })
