@@ -3,6 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
+const data = 11;
+
 const TA02Controller = require('../controllers/ta02');
 
 router.get('/', TA02Controller.getTA02);
@@ -14,3 +16,4 @@ router.post('/deleteUser', TA02Controller.deleteUser);
 
 module.exports = router;
 // This is also a comment
+// lol
