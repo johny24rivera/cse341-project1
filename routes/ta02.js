@@ -3,6 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
+const dat = 4;
+
 const TA02Controller = require('../controllers/ta02');
 
 router.get('/', TA02Controller.getTA02);
